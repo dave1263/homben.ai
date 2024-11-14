@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homben.ai Chat Module</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Exo:wght@400&display=swap');
+
+        /* Main Styling */
+        body {
+            background-color: #dedfde; /* Light background color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            color: white;
+            margin: 0; /* Reset default margin */
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif; /* Futuristic font */
+            font-size: 48px;
+            color: #000000; /* Black color for a techno look */
+            margin-left: 15px;
+        }
+
+        #sriLankaMap {
+            width: 60px; /* Image width */
+            height: 60px; /* Image height */
+            object-fit: cover; /* Image fit */
+        }
+
+        .chat-container {
+            background-color: #2c2c2c; /* Dark grey background for chat area */
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            height: 70%;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            width: 80%; /* Match input container width with chat container */
+        }
+
+        .input-box {
+            flex: 1; /* Grow to fill space */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .send-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #333333; /* Dark button background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .send-button:hover {
+            background-color: #555555; /* Lighter button on hover */
+        }
+
+        .message {
+            margin: 10px 0;
+            font-family: 'Exo', sans-serif; /* Futuristic font for messages */
+        }
+
+        .user {
+            color: #ffffff; /* White color for user messages */
+        }
+
+        .homben-ai {
+            color: #B39EB5; /* Dark green color for chatbot response */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="hombenai.jpg" alt="Sri Lanka Map" id="sriLankaMap">
+        <h1>Homben.ai</h1>
+    </div>
+
+    <div class="chat-container" id="chatContainer"></div>
+
+    <div class="input-container">
+        <input type="text" id="userInput" class="input-box" placeholder="Type your message..." aria-label="Message input">
+        <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+
+        // Predefined joke responses
+        const jokes = [
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "I told my wife she was drawing her eyebrows too high. She looked surprised!",
+            "Why don't scientists trust atoms? Because they make up everything!",
+            "What do you call fake spaghetti? An impasta!"
+        ];
+
+        function appendMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${sender}: ${message}`;
+            messageElement.className = 'message ' + (sender === 'User' ? 'user' : 'homben-ai'); // Dynamic class
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to the bottom
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim().toLowerCase();
+            if (message !== '') {
+                appendMessage(message, 'User');
+                userInput.value = '';
+
+                let responseMessage;
+
+                // Handling weather-related queries
+                if (message.includes("weather")) {
+                    responseMessage = "The weather today is sunny with a slight chance of rain. Make sure to bring an umbrella just in case!";
+                }
+                // Handling jokes
+                else if (message.includes("joke")) {
+                    responseMessage = jokes[Math.floor(Math.random() * jokes.length)];
+                }
+                // Handling "HAHAHA"
+                else if (message.includes("haha")) {
+                    responseMessage = "Funny, right? I'm glad you liked it!";
+                }
+                // Handling "Yes" or "Indeed"
+                else if (message.includes("yes") || message.includes("indeed")) {
+                    responseMessage = "Indeed! I'm always here to assist!";
+                }
+                // Handling time requests
+                else if (message.includes("time")) {
+                    const currentTime = new Date().toLocaleTimeString();
+                    responseMessage = `The current time is ${currentTime}.`;
+                }
+                // Handling random greetings
+                else if (message.includes("how are you")) {
+                    responseMessage = "I'm doing great, thank you for asking!";
+                } else {
+                    // Default response
+                    responseMessage = "I'm here to assist you. How can I help?";
+                }
+
+                // Simulated AI response
+                setTimeout(() => {
+                    appendMessage(responseMessage, 'Homben.ai');
+                }, 500);
+            }
+        }
+
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
+
